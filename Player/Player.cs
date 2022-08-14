@@ -46,6 +46,7 @@ namespace ActionRPG.Player
 
         private void HandleAttackState()
         {
+            _currentVelocity = Vector2.Zero;
             _animationPlaybackState.Travel(PlayerState.Attack.ToString());
         }
 
