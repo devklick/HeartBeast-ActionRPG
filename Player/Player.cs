@@ -83,7 +83,7 @@ namespace ActionRPG.Player
         private Vector2 SpeedUp(Vector2 currentVelocity, Vector2 input, float delta)
             => currentVelocity.MoveToward(input * maxSpeed, acceleration * delta);
 
-        private void Attack_Animation_Finished() => _playerState = PlayerState.Run;
+        private void Attack_Animation_Finished() => _playerState = PlayerState.Idle;
     }
 }
 
