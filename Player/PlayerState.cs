@@ -5,10 +5,11 @@ namespace ActionRPG.Player
     /// </summary>
     public enum PlayerState
     {
+        Idle,
         /// <summary>
         /// Move consists of running and idling. It makes no sense, but that's just how it is.
         /// </summary>
-        Move,
+        Run,
 
         Attack
     }
