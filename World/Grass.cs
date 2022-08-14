@@ -13,11 +13,6 @@ namespace ActionRPG.World
             _destroyAnimation = GetNode<AnimatedSprite>("DestroyAnimation");
         }
 
-        public override void _Process(float delta)
-        {
-            // if (Input.IsActionJustPressed("attack")) Destroy();
-        }
-
         private void Destroy()
         {
             _grassSprite.Visible = false;
