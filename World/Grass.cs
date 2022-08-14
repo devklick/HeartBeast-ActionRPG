@@ -15,7 +15,7 @@ namespace ActionRPG.World
 
         public override void _Process(float delta)
         {
-            if (Input.IsActionJustPressed("attack")) Destroy();
+            // if (Input.IsActionJustPressed("attack")) Destroy();
         }
 
         private void Destroy()
@@ -29,6 +29,11 @@ namespace ActionRPG.World
         {
             _destroyAnimation.QueueFree();
             QueueFree();
+        }
+
+        private void _on_HurtBox_area_entered(Area2D area)
+        {
+            Destroy();
         }
     }
 }

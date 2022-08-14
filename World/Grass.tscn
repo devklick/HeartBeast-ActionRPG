@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://World/Grass.png" type="Texture" id=1]
 [ext_resource path="res://World/Grass.cs" type="Script" id=2]
 [ext_resource path="res://Effects/GrassDestroyEffect.png" type="Texture" id=3]
+[ext_resource path="res://Overlap/HurtBox.tscn" type="PackedScene" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 3 )
@@ -32,6 +33,9 @@ animations = [ {
 "speed": 15.0
 } ]
 
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 7, 7 )
+
 [node name="Grass" type="Node2D"]
 script = ExtResource( 2 )
 
@@ -47,4 +51,14 @@ animation = "Animate"
 centered = false
 offset = Vector2( -8, -8 )
 
+[node name="HurtBox" parent="." instance=ExtResource( 4 )]
+collision_layer = 8
+
+[node name="CollisionShape2D" parent="HurtBox" index="0"]
+position = Vector2( 8, 8 )
+shape = SubResource( 7 )
+
 [connection signal="animation_finished" from="DestroyAnimation" to="." method="_on_DestroyAnimation_animation_finished"]
+[connection signal="area_entered" from="HurtBox" to="." method="_on_HurtBox_area_entered"]
+
+[editable path="HurtBox"]
