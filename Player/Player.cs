@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 namespace ActionRPG.Player
 {
@@ -27,7 +26,7 @@ namespace ActionRPG.Player
             _animationTree.Active = true;
         }
 
-        public override void _PhysicsProcess(float delta)
+        public override void _Process(float delta)
         {
             if (_playerState == PlayerState.Idle || _playerState == PlayerState.Run) HandleMoveState(delta);
             else if (_playerState == PlayerState.Attack) HandleAttackState();
