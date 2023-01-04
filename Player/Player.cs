@@ -64,7 +64,7 @@ namespace ActionRPG.Player
         }
 
         private void UpdateAnimationTree(PlayerState state, object value)
-            => _animationTree.Set($"parameters/{state.ToString()}/blend_position", value);
+            => _animationTree.Set($"parameters/{state}/blend_position", value);
 
         private Vector2 GetInputVector() => new Vector2(
                 Input.GetActionStrength("ui_right") - Input.GetActionStrength("ui_left"),
