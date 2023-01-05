@@ -5,7 +5,10 @@ namespace ActionRPG.Player
     public class Player : KinematicBody2D
     {
         [Export]
-        private float maxSpeed = 70;
+        private float runSpeed = 70;
+
+        [Export]
+        private float rollSpeed = 120;
 
         [Export]
         private float acceleration = 500;
@@ -18,6 +21,11 @@ namespace ActionRPG.Player
         private Vector2 _currentVelocity = Vector2.Zero;
         private PlayerState _playerState = PlayerState.Idle;
 
+        /// <summary>
+        /// Initialized to the direction that the player faces by default
+        /// </summary>
+        private Vector2 _rollVector = Vector2.Down;
+
         public override void _Ready()
         {
             _animationTree = GetNode<AnimationTree>("AnimationTree");
@@ -29,17 +37,25 @@ namespace ActionRPG.Player
         public override void _Process(float delta)
         {
             if (_playerState == PlayerState.Idle || _playerState == PlayerState.Run) HandleMoveState(delta);
+            else if (_playerState == PlayerState.Roll) HandleRollState();
             else if (_playerState == PlayerState.Attack) HandleAttackState();
         }
 
         private void HandleMoveState(float delta)
         {
             var inputVector = GetInputVector();
+
+            if (inputVector != Vector2.Zero)
+            {
+                _rollVector = inputVector;
+            }
+
             UpdateAnimation(inputVector);
             UpdateVelocity(inputVector, delta);
             _currentVelocity = MoveAndSlide(_currentVelocity);
 
             if (Input.IsActionJustPressed("attack")) _playerState = PlayerState.Attack;
+            else if (Input.IsActionJustPressed("roll")) _playerState = PlayerState.Roll;
             else if (_currentVelocity == Vector2.Zero) _playerState = PlayerState.Idle;
         }
 
@@ -47,6 +63,13 @@ namespace ActionRPG.Player
         {
             _currentVelocity = Vector2.Zero;
             _animationPlaybackState.Travel(PlayerState.Attack.ToString());
+        }
+
+        private void HandleRollState()
+        {
+            _currentVelocity = _rollVector * rollSpeed;
+            _animationPlaybackState.Travel(PlayerState.Roll.ToString());
+            _currentVelocity = MoveAndSlide(_currentVelocity);
         }
 
 
@@ -59,6 +82,7 @@ namespace ActionRPG.Player
                 UpdateAnimationTree(PlayerState.Idle, inputVector);
                 UpdateAnimationTree(PlayerState.Run, inputVector);
                 UpdateAnimationTree(PlayerState.Attack, inputVector);
+                UpdateAnimationTree(PlayerState.Roll, _rollVector);
                 _animationPlaybackState.Travel(PlayerState.Run.ToString());
             }
         }
@@ -81,7 +105,7 @@ namespace ActionRPG.Player
             => currentVelocity.MoveToward(Vector2.Zero, friction * delta);
 
         private Vector2 SpeedUp(Vector2 currentVelocity, Vector2 input, float delta)
-            => currentVelocity.MoveToward(input * maxSpeed, acceleration * delta);
+            => currentVelocity.MoveToward(input * runSpeed, acceleration * delta);
 
         private void Attack_Animation_Finished() => _playerState = PlayerState.Idle;
         private void Roll_Animation_Finished() => _playerState = PlayerState.Idle;
