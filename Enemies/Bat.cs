@@ -45,7 +45,7 @@ namespace ActionRPG.Enemies
         {
             if (!(area is SwordHitbox swordHitbox)) return;
 
-            _knockBack = swordHitbox.KnockBackVector * 120;
+            _knockBack = swordHitbox.KnockBackDirection * 120;
             _stats.Health -= swordHitbox.Damage;
         }
 

@@ -39,7 +39,7 @@ namespace ActionRPG.Player
             _animationTree.Active = true;
 
             _swordHitbox = GetNode<SwordHitbox>("HitboxPivot/SwordHitbox");
-            _swordHitbox.KnockBackVector = _rollVector;
+            _swordHitbox.KnockBackDirection = _rollVector;
 
         }
 
@@ -59,7 +59,7 @@ namespace ActionRPG.Player
             if (inputVector != Vector2.Zero)
             {
                 _rollVector = inputVector;
-                _swordHitbox.KnockBackVector = _rollVector;
+                _swordHitbox.KnockBackDirection = _rollVector;
             }
 
             UpdateAnimation(inputVector);
