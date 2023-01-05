@@ -84,6 +84,7 @@ namespace ActionRPG.Player
             => currentVelocity.MoveToward(input * maxSpeed, acceleration * delta);
 
         private void Attack_Animation_Finished() => _playerState = PlayerState.Idle;
+        private void Roll_Animation_Finished() => _playerState = PlayerState.Idle;
     }
 }
 
