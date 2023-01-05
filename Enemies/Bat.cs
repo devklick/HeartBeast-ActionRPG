@@ -7,11 +7,17 @@ namespace ActionRPG.Enemies
 {
     public class Bat : KinematicBody2D
     {
-        [Export] private readonly float _friction = 200;
+        #region Exports
+        [Export]
+        private readonly float _friction = 200;
+        #endregion
+
+        #region Privates
         private Vector2 _knockBack = Vector2.Zero;
-
         private Stats _stats;
+        #endregion
 
+        #region Overrides
         public override void _Ready()
         {
             _stats = GetNode<Stats>("Stats");
@@ -24,12 +30,17 @@ namespace ActionRPG.Enemies
             _knockBack = _knockBack.MoveToward(Vector2.Zero, _friction * delta);
             _knockBack = MoveAndSlide(_knockBack);
         }
+        #endregion
 
+        #region Internal Helper Functions
         private void SubscribeToStatsEvents(Stats stats)
         {
             _stats.Connect(Stats.NoHealthSignalName, this, nameof(_on_Stats_no_health));
         }
+        #endregion
 
+        #region Event Handlers
+#pragma warning disable IDE1006
         private void _on_HurtBox_area_entered(Area2D area)
         {
             if (!(area is SwordHitbox swordHitbox)) return;
@@ -42,5 +53,7 @@ namespace ActionRPG.Enemies
         {
             QueueFree();
         }
+#pragma warning restore IDE1006
+        #endregion
     }
 }

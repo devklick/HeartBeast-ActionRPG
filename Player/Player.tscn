@@ -35,7 +35,7 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "Attack_Animation_Finished"
+"method": "MoveToIdleState"
 } ]
 }
 tracks/2/type = "value"
@@ -89,7 +89,7 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "Attack_Animation_Finished"
+"method": "MoveToIdleState"
 } ]
 }
 tracks/2/type = "value"
@@ -143,7 +143,7 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "Attack_Animation_Finished"
+"method": "MoveToIdleState"
 } ]
 }
 tracks/2/type = "value"
@@ -197,7 +197,7 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "Attack_Animation_Finished"
+"method": "MoveToIdleState"
 } ]
 }
 tracks/2/type = "value"
@@ -366,7 +366,7 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "Roll_Animation_Finished"
+"method": "MoveToIdleState"
 } ]
 }
 
@@ -396,7 +396,7 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "Roll_Animation_Finished"
+"method": "MoveToIdleState"
 } ]
 }
 
@@ -426,7 +426,7 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "Roll_Animation_Finished"
+"method": "MoveToIdleState"
 } ]
 }
 
@@ -456,7 +456,7 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "Roll_Animation_Finished"
+"method": "MoveToIdleState"
 } ]
 }
 

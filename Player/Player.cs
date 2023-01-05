@@ -4,6 +4,7 @@ namespace ActionRPG.Player
 {
     public class Player : KinematicBody2D
     {
+        #region Exports
         [Export]
         private readonly float _runSpeed = 70;
 
@@ -15,7 +16,9 @@ namespace ActionRPG.Player
 
         [Export]
         private readonly float _friction = 500;
+        #endregion
 
+        #region Privates
         private AnimationTree _animationTree;
         private AnimationNodeStateMachinePlayback _animationPlaybackState;
         private Vector2 _currentVelocity = Vector2.Zero;
@@ -26,7 +29,9 @@ namespace ActionRPG.Player
         /// </summary>
         private Vector2 _rollVector = Vector2.Down;
         private SwordHitbox _swordHitbox;
+        #endregion
 
+        #region Overrides
         public override void _Ready()
         {
             _animationTree = GetNode<AnimationTree>("AnimationTree");
@@ -44,7 +49,9 @@ namespace ActionRPG.Player
             else if (_playerState == PlayerState.Roll) HandleRollState();
             else if (_playerState == PlayerState.Attack) HandleAttackState();
         }
+        #endregion
 
+        #region Internal Helper Functions
         private void HandleMoveState(float delta)
         {
             var inputVector = GetInputVector();
@@ -63,6 +70,7 @@ namespace ActionRPG.Player
             else if (Input.IsActionJustPressed("roll")) _playerState = PlayerState.Roll;
             else if (_currentVelocity == Vector2.Zero) _playerState = PlayerState.Idle;
         }
+
 
         private void HandleAttackState()
         {
@@ -111,8 +119,12 @@ namespace ActionRPG.Player
 
         private Vector2 SpeedUp(Vector2 currentVelocity, Vector2 input, float delta)
             => currentVelocity.MoveToward(input * _runSpeed, _acceleration * delta);
+        #endregion
 
-        private void Attack_Animation_Finished() => _playerState = PlayerState.Idle;
-        private void Roll_Animation_Finished() => _playerState = PlayerState.Idle;
+        #region External Helper Functions
+#pragma warning disable IDE0051
+        private void MoveToIdleState() => _playerState = PlayerState.Idle;
+#pragma warning restore IDE0051
+        #endregion
     }
 }
