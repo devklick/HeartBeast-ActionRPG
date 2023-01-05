@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=59 format=2]
 
 [ext_resource path="res://World/Bush.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://World/DirtTileset.png" type="Texture" id=4]
 [ext_resource path="res://World/CliffTileset.png" type="Texture" id=5]
 [ext_resource path="res://World/Grass.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Enemies/Bat.tscn" type="PackedScene" id=7]
 
 [sub_resource type="TileSet" id=1]
 0/name = "DirtTileset.png 0"
@@ -521,6 +522,15 @@ format = 1
 tile_data = PoolIntArray( -1, 0, 0, -65536, 0, 1, -65535, 0, 1, -65534, 0, 1, -65533, 0, 1, -65532, 0, 1, -65531, 0, 5, -65530, 0, 196610, -65528, 0, 0, -65527, 0, 1, -65526, 0, 5, -65525, 0, 196610, 65535, 0, 65536, 0, 0, 65541, 1, 0, 131073, 2, 0, 131073, 3, 0, 131073, 4, 0, 131073, 5, 0, 131074, 8, 0, 131072, 9, 0, 131073, 10, 0, 65543, 131071, 0, 131072, 65536, 0, 131074, 65546, 0, 131075, 196615, 0, 0, 196616, 0, 2, 262145, 0, 0, 262146, 0, 1, 262147, 0, 1, 262148, 0, 2, 262151, 0, 65536, 262152, 0, 131077, 262153, 0, 1, 262154, 0, 2, 393215, 0, 0, 327680, 0, 1, 327681, 0, 131078, 327682, 0, 65541, 327683, 0, 131073, 327684, 0, 131074, 327687, 0, 131072, 327688, 0, 131073, 327689, 0, 65542, 327690, 0, 65538, 458751, 0, 131072, 393216, 0, 131073, 393217, 0, 131073, 393218, 0, 131074, 393225, 0, 131072, 393226, 0, 131074 )
 
 [node name="YSort" type="YSort" parent="."]
+
+[node name="Bat" parent="YSort" instance=ExtResource( 7 )]
+position = Vector2( 132, 71 )
+
+[node name="Bat2" parent="YSort" instance=ExtResource( 7 )]
+position = Vector2( 34, 122 )
+
+[node name="Bat3" parent="YSort" instance=ExtResource( 7 )]
+position = Vector2( 296, 106 )
 
 [node name="Player" parent="YSort" instance=ExtResource( 2 )]
 position = Vector2( 202, 17 )

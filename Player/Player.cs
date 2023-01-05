@@ -5,16 +5,16 @@ namespace ActionRPG.Player
     public class Player : KinematicBody2D
     {
         [Export]
-        private float runSpeed = 70;
+        private readonly float _runSpeed = 70;
 
         [Export]
-        private float rollSpeed = 120;
+        private readonly float _rollSpeed = 120;
 
         [Export]
-        private float acceleration = 500;
+        private readonly float _acceleration = 500;
 
         [Export]
-        private float friction = 500;
+        private readonly float _friction = 500;
 
         private AnimationTree _animationTree;
         private AnimationNodeStateMachinePlayback _animationPlaybackState;
@@ -25,13 +25,17 @@ namespace ActionRPG.Player
         /// Initialized to the direction that the player faces by default
         /// </summary>
         private Vector2 _rollVector = Vector2.Down;
+        private SwordHitbox _swordHitbox;
 
         public override void _Ready()
         {
             _animationTree = GetNode<AnimationTree>("AnimationTree");
             _animationPlaybackState = _animationTree.Get("parameters/playback") as AnimationNodeStateMachinePlayback;
-
             _animationTree.Active = true;
+
+            _swordHitbox = GetNode<SwordHitbox>("HitboxPivot/SwordHitbox");
+            _swordHitbox.KnockBackVector = _rollVector;
+
         }
 
         public override void _Process(float delta)
@@ -48,6 +52,7 @@ namespace ActionRPG.Player
             if (inputVector != Vector2.Zero)
             {
                 _rollVector = inputVector;
+                _swordHitbox.KnockBackVector = _rollVector;
             }
 
             UpdateAnimation(inputVector);
@@ -67,7 +72,7 @@ namespace ActionRPG.Player
 
         private void HandleRollState()
         {
-            _currentVelocity = _rollVector * rollSpeed;
+            _currentVelocity = _rollVector * _rollSpeed;
             _animationPlaybackState.Travel(PlayerState.Roll.ToString());
             _currentVelocity = MoveAndSlide(_currentVelocity);
         }
@@ -102,14 +107,12 @@ namespace ActionRPG.Player
         }
 
         private Vector2 SlowDown(Vector2 currentVelocity, float delta)
-            => currentVelocity.MoveToward(Vector2.Zero, friction * delta);
+            => currentVelocity.MoveToward(Vector2.Zero, _friction * delta);
 
         private Vector2 SpeedUp(Vector2 currentVelocity, Vector2 input, float delta)
-            => currentVelocity.MoveToward(input * runSpeed, acceleration * delta);
+            => currentVelocity.MoveToward(input * _runSpeed, _acceleration * delta);
 
         private void Attack_Animation_Finished() => _playerState = PlayerState.Idle;
         private void Roll_Animation_Finished() => _playerState = PlayerState.Idle;
     }
 }
-
-
