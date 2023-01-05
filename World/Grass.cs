@@ -5,14 +5,10 @@ namespace ActionRPG.World
     public class Grass : Node2D
     {
         #region Privates
-        private PackedScene _grassDestroyedScene;
+        private static readonly PackedScene _grassDestroyedScene = (PackedScene)ResourceLoader.Load("res://Effects/GrassDestroyedEffect.tscn");
         #endregion
 
         #region Overrides
-        public override void _Ready()
-        {
-            _grassDestroyedScene = (PackedScene)ResourceLoader.Load("res://Effects/GrassDestroyedEffect.tscn");
-        }
         #endregion
 
         #region Internal Helper Functions

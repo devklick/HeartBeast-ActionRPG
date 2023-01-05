@@ -15,6 +15,7 @@ namespace ActionRPG.Enemies
         #region Privates
         private Vector2 _knockBack = Vector2.Zero;
         private Stats _stats;
+        private static readonly PackedScene _enemyDestroyedScene = (PackedScene)ResourceLoader.Load("res://Effects/EnemyDestroyedEffect.tscn");
         #endregion
 
         #region Overrides
@@ -51,6 +52,9 @@ namespace ActionRPG.Enemies
 
         private void _on_Stats_no_health()
         {
+            var enemyDestroyedEffect = _enemyDestroyedScene.Instance<Node2D>();
+            GetParent().AddChild(enemyDestroyedEffect);
+            enemyDestroyedEffect.GlobalPosition = GlobalPosition;
             QueueFree();
         }
 #pragma warning restore IDE1006
