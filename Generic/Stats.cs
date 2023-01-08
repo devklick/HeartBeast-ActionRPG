@@ -15,8 +15,11 @@ namespace ActionRPG.Generic
 
         #region Signals
         [Signal]
-        public delegate void NoHealth();
-        public static readonly string NoHealthSignalName = nameof(NoHealth);
+        public delegate void HealthDecreasedAndDepleted();
+        public static readonly string HealthDecreasedAndDepletedSignalName = nameof(HealthDecreasedAndDepleted);
+        [Signal]
+        public delegate void HealthDecreasedButNotDepleted();
+        public static readonly string HealthDecreasedButNotDepletedSignalName = nameof(HealthDecreasedButNotDepleted);
         #endregion
 
         #region Privates
@@ -27,18 +30,22 @@ namespace ActionRPG.Generic
         public override void _Ready()
         {
             Health = MaxHealth;
+            GD.Print("Health is ", health);
         }
         #endregion
 
         #region Internal Helper Functions
         private void SetHealth(int value)
         {
-            health = value;
+            GD.Print("Health updating to ", value);
 
-            if (health <= 0)
+            if (value < health)
             {
-                EmitSignal(NoHealthSignalName);
+                if (value <= 0) EmitSignal(HealthDecreasedAndDepletedSignalName);
+                else EmitSignal(HealthDecreasedButNotDepletedSignalName);
             }
+
+            health = value;
         }
         #endregion
     }

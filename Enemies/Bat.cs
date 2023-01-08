@@ -1,4 +1,5 @@
 using System;
+using ActionRPG.Effects;
 using ActionRPG.Generic;
 using ActionRPG.Player;
 using Godot;
@@ -15,15 +16,22 @@ namespace ActionRPG.Enemies
         #region Privates
         private Vector2 _knockBack = Vector2.Zero;
         private Stats _stats;
-        private static readonly PackedScene _enemyDestroyedScene = (PackedScene)ResourceLoader.Load("res://Effects/EnemyDestroyedEffect.tscn");
+        private HurtBox _hurtBox;
+        private static readonly PackedScene _enemyDestroyedScene =
+            (PackedScene)ResourceLoader.Load("res://Effects/EnemyDestroyedEffect.tscn");
+        private static readonly PackedScene _enemyDamagedEffectScene =
+            (PackedScene)ResourceLoader.Load("res://Effects/EnemyDamagedEffect.tscn");
+
         #endregion
 
         #region Overrides
         public override void _Ready()
         {
             _stats = GetNode<Stats>("Stats");
+            _hurtBox = GetNode<HurtBox>("HurtBox");
 
             SubscribeToStatsEvents(_stats);
+            SubscribeToHurtBoxEvents(_hurtBox);
         }
 
         public override void _Process(float delta)
@@ -36,7 +44,13 @@ namespace ActionRPG.Enemies
         #region Internal Helper Functions
         private void SubscribeToStatsEvents(Stats stats)
         {
-            _stats.Connect(Stats.NoHealthSignalName, this, nameof(_on_Stats_no_health));
+            stats.Connect(Stats.HealthDecreasedAndDepletedSignalName, this, nameof(_on_Stats_HealthDecreasedAndDepleted));
+            stats.Connect(Stats.HealthDecreasedButNotDepletedSignalName, this, nameof(_on_Stats_HealthDecreasedButNotDepleted));
+        }
+
+        private void SubscribeToHurtBoxEvents(HurtBox hurtBox)
+        {
+            hurtBox.Connect("area_entered", this, nameof(_on_HurtBox_area_entered));
         }
         #endregion
 
@@ -46,15 +60,23 @@ namespace ActionRPG.Enemies
         {
             if (!(area is SwordHitbox swordHitbox)) return;
 
+            // TODO: Variable this magic number
             _knockBack = swordHitbox.KnockBackDirection * 120;
             _stats.Health -= swordHitbox.Damage;
         }
 
-        private void _on_Stats_no_health()
+        private void _on_Stats_HealthDecreasedButNotDepleted()
         {
-            var enemyDestroyedEffect = _enemyDestroyedScene.Instance<Node2D>();
-            GetParent().AddChild(enemyDestroyedEffect);
-            enemyDestroyedEffect.GlobalPosition = GlobalPosition;
+            var effect = _enemyDamagedEffectScene.Instance<OneShotEffect>();
+            GetParent().AddChild(effect);
+            effect.GlobalPosition = GlobalPosition - new Vector2(0, 8);
+        }
+
+        private void _on_Stats_HealthDecreasedAndDepleted()
+        {
+            var effect = _enemyDestroyedScene.Instance<OneShotEffect>();
+            GetParent().AddChild(effect);
+            effect.GlobalPosition = GlobalPosition;
             QueueFree();
         }
 #pragma warning restore IDE1006
