@@ -11,12 +11,22 @@ namespace ActionRPG.Enemies
         #region Exports
         [Export]
         private readonly float _friction = 200;
+
+        [Export]
+        private readonly float _acceleration = 300;
+
+        [Export]
+        private readonly float _maxSpeed = 50;
         #endregion
 
         #region Privates
+        private BatStat _state = BatStat.Chase;
         private Vector2 _knockBack = Vector2.Zero;
+        private Vector2 _velocity = Vector2.Zero;
         private Stats _stats;
         private HurtBox _hurtBox;
+        private PlayerDetectionZone _playerDetectionZone;
+        private AnimatedSprite _animatedSprite;
         private static readonly PackedScene _enemyDestroyedScene =
             (PackedScene)ResourceLoader.Load("res://Effects/EnemyDestroyedEffect.tscn");
         private static readonly PackedScene _enemyDamagedEffectScene =
@@ -29,6 +39,8 @@ namespace ActionRPG.Enemies
         {
             _stats = GetNode<Stats>("Stats");
             _hurtBox = GetNode<HurtBox>("HurtBox");
+            _playerDetectionZone = GetNode<PlayerDetectionZone>("PlayerDetectionZone");
+            _animatedSprite = GetNode<AnimatedSprite>("AnimatedSprite");
 
             SubscribeToStatsEvents(_stats);
             SubscribeToHurtBoxEvents(_hurtBox);
@@ -38,6 +50,20 @@ namespace ActionRPG.Enemies
         {
             _knockBack = _knockBack.MoveToward(Vector2.Zero, _friction * delta);
             _knockBack = MoveAndSlide(_knockBack);
+
+            switch (_state)
+            {
+                case BatStat.Idle:
+                    _velocity = _velocity.MoveToward(Vector2.Zero, _friction * delta);
+                    if (_playerDetectionZone.PlayerDetected) _state = BatStat.Chase;
+                    break;
+                case BatStat.Wander:
+                    break;
+                case BatStat.Chase:
+                    ChasePlayer(delta);
+                    break;
+            }
+            _velocity = MoveAndSlide(_velocity);
         }
         #endregion
 
@@ -51,6 +77,21 @@ namespace ActionRPG.Enemies
         private void SubscribeToHurtBoxEvents(HurtBox hurtBox)
         {
             hurtBox.Connect("area_entered", this, nameof(_on_HurtBox_area_entered));
+        }
+
+        private void ChasePlayer(float delta)
+        {
+            if (_playerDetectionZone.PlayerDetected)
+            {
+                var direction = (_playerDetectionZone.Player.GlobalPosition - GlobalPosition).Normalized();
+                _velocity = _velocity.MoveToward(direction * _maxSpeed, _acceleration * delta);
+            }
+            else
+            {
+                _state = BatStat.Idle;
+            }
+
+            _animatedSprite.FlipH = _velocity.x < 0;
         }
         #endregion
 
